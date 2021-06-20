@@ -6,7 +6,10 @@
   <body class="container">
     <button id="complimentButton">Get a compliment</button>
     <button id="fortuneButton">Get Your Fortune</button>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <button id='getMoviebtn'>Get Movie</button>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script><br>
+     <input id="newMovie" placeholder="Suggest Movie" />
+    <button id="suggestButton">Suggest Movie</button>    
     <script>
       document.getElementById("complimentButton").onclick = function () {
         axios.get("http://localhost:4000/api/compliment/")
@@ -21,31 +24,31 @@
           const data = response.data;
           alert(data);
         });
-      }
-    </script>
-    <form>
-    <label for="title">Title:</label><br>
-    <input type="text"
-            id="title"
-            placeholder="Movie Title"/><br>
-    <label for="genre">Genre:</label><br>
-    <input type="text"
-            id="genre"
-            placeholder="Movie Genre"/><br>
-    <label for="image">ImageUrl:</label><br>        
-    <input type="url"
-            id="imageUrl"
-            placeholder="Paste imageUrl"/><br>
-    <button id="suggestButton">Sugget Movie</button>
-    <script>
-      document.getElementById("suggestButton").onclick = function(){
-        axios.post('http://localhost:4000/api/movies').then(function(response){
-          const data = response.data;
-          alert('Thanks for adding movie to our List!');
+      };
+      let moviesArrLength =0;
+
+      document.querySelector("#getMoviebtn").addEventListener('click', function(){
+        axios.get("http://localhost:4000/api/movies")
+        .then(function(res){
+          moviesArrLength = res.data.length
+          alert(res.data);})
+          .catch(function(err){
+            console.log(err);
+          })
+          });
+      document.querySelector('#suggestButton').addEventListener('click', function(){
+        const  movieTitle  = document.querySelector('#newMovie').value;
+        const body = { movieTitle };
+        axios.post("http://localhost:4000/api/movies", body)
+        .then(function(res){
+          moviesArrLength = res.data.lenth
+          alert('Movie Added!');
         })
-      }
+        .catch(function(err) {
+          console.log(err)
+        })
+      });
     </script>
     
-    </form>
   </body>
 </html>
